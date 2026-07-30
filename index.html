@@ -32,9 +32,19 @@
   .btn:hover { color: rgba(255,255,255,0.9); border-color: rgba(255,255,255,0.5); }
 
   /* INTRO */
-  #intro-lines { max-width: 900px; width: 100%; }
+  #intro-grid {
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 0 64px;
+    justify-content: center;
+    width: 100%;
+    align-items: start;
+  }
+  #intro-guide { border-left: 1px solid rgba(255,255,255,0.08); padding-left: 40px; }
   .iline { font-size: 13px; font-weight: 300; letter-spacing: .05em; line-height: 2.2; color: rgba(255,255,255,0.75); opacity: 0; transform: translateY(5px); transition: opacity .6s, transform .6s; white-space: nowrap; }
   .iline.dim { color: rgba(255,255,255,0.55); }
+  .iline.sp { line-height: 1.1; }
+  .iline.lbl { font-size: 9px; letter-spacing: .24em; color: rgba(255,255,255,0.3); line-height: 3.2; }
   .iline strong { color: rgba(255,248,200,0.85); font-weight: 400; }
   .iline.show { opacity: 1; transform: translateY(0); }
   .iline .cursor {
@@ -44,7 +54,7 @@
     animation: blink .7s step-end infinite;
   }
   @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
-  #intro-cta { margin-top: 40px; opacity: 0; transition: opacity .8s; }
+  #intro-cta { margin-top: 52px; opacity: 0; transition: opacity .8s; align-self: center; }
   #intro-cta.show { opacity: 1; }
   #skip-hint {
     margin-top: 24px; font-family: 'DM Mono', monospace; font-weight: 300;
@@ -205,22 +215,37 @@
 </div>
 
 <div class="screen solid" id="intro">
-  <div id="intro-lines">
-    <div class="iline"     data-text="Sei dentro un labirinto."></div>
-    <div class="iline"     data-text="Qualcosa ti ha portato qui."></div>
-    <div class="iline"     data-text="*Perché?*"></div>
-    <div class="iline dim" data-text="—"></div>
-    <div class="iline"     data-text="Una strana sensazione ti pervade."></div>
-    <div class="iline"     data-text="Qualcosa di rimasto nascosto troppo a lungo dentro di te cerca di uscire."></div>
-    <div class="iline"     data-text="*Ma cosa?*"></div>
-    <div class="iline dim" data-text="—"></div>
-    <div class="iline dim" data-text="Il labirinto ha *tre piani*. Su ognuno ci sono *quattro nuclei*."></div>
-    <div class="iline dim" data-text="Aprili tutti e nel pavimento si accender&agrave; una *luce*."></div>
-    <div class="iline dim" data-text="Attraversala per salire."></div>
-    <div class="iline dim" data-text="Se ti perdi nel *Buio*, cerca la *Luce*."></div>
-    <div class="iline dim" data-text="Solo dopo saprai cosa stai *cercando*."></div>
-    <div class="iline dim" data-text="—"></div>
-    <div class="iline dim" data-text="*↑ ↓* camminare &nbsp; *← →* girare &nbsp; *SHIFT* correre &nbsp; *SPAZIO* ricorda"></div>
+  <div id="intro-grid">
+    <div id="intro-lore">
+      <div class="iline lbl" data-text="DOVE"></div>
+      <div class="iline"     data-text="Sei dentro un labirinto."></div>
+      <div class="iline"     data-text="Qualcosa ti ha portato qui."></div>
+      <div class="iline"     data-text="*Perché?*"></div>
+      <div class="iline sp"  data-text=" "></div>
+      <div class="iline"     data-text="Una strana sensazione ti pervade."></div>
+      <div class="iline"     data-text="Qualcosa nascosto troppo a lungo"></div>
+      <div class="iline"     data-text="dentro di te cerca di uscire."></div>
+      <div class="iline"     data-text="*Ma cosa?*"></div>
+      <div class="iline sp"  data-text=" "></div>
+      <div class="iline"     data-text="Qui non si vince."></div>
+      <div class="iline"     data-text="Chi cerca il controllo resta fermo."></div>
+      <div class="iline"     data-text="L'unico modo per ritrovarsi è *perdersi*."></div>
+    </div>
+
+    <div id="intro-guide">
+      <div class="iline lbl" data-text="COME"></div>
+      <div class="iline dim" data-text="Tre piani, *quattro nuclei* ciascuno."></div>
+      <div class="iline dim" data-text="Aprili tutti e si accende una *luce*."></div>
+      <div class="iline dim" data-text="Attraversala per salire."></div>
+      <div class="iline sp"  data-text=" "></div>
+      <div class="iline dim" data-text="Se ti perdi nel *Buio*, cerca la *Luce*."></div>
+      <div class="iline sp"  data-text=" "></div>
+      <div class="iline lbl" data-text="COMANDI"></div>
+      <div class="iline dim" data-text="*↑ ↓* &nbsp;camminare"></div>
+      <div class="iline dim" data-text="*← →* &nbsp;girare"></div>
+      <div class="iline dim" data-text="*SHIFT* &nbsp;correre"></div>
+      <div class="iline dim" data-text="*SPAZIO* &nbsp;ricordare"></div>
+    </div>
   </div>
   <div id="intro-cta"><button class="btn" id="btn-enter">inizia il gioco</button></div>
   <div id="skip-hint">premi SPAZIO per saltare</div>
