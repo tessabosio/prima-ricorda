@@ -898,7 +898,7 @@ document.getElementById('btn-map-key').addEventListener('click', () => {
 function updateCounter() {
   const onFloor = memNodes.filter(n => n.floor === currentFloor);
   const floorDone = onFloor.filter(n => n.triggered).length;
-  ctrEl.textContent = `piano ${currentFloor+1} di 3  ·  ${floorDone} ricordi su ${onFloor.length}`;
+  ctrEl.textContent = `piano ${currentFloor+1}  ·  nuclei ${floorDone} di ${onFloor.length}`;
 }
 
 function goHome() {
