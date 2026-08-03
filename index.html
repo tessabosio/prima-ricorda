@@ -338,7 +338,7 @@ const MEMORIES = [
   {
     label: 'ricordo 01 — la famiglia',
     text: 'Qualcuno in famiglia sembra aver scelto la strada giusta. Quella concreta, quella che si capisce, quella di cui si parla con orgoglio.',
-    ctx: 'La tua no.',
+    ctx: 'Io ancora non ho trovato la mia strada.',
     choices: [
       { t: 'Ho smesso di parlare di quello che faccio. È più semplice cambiare argomento.', s:{c:0,a:1,f:3}, thought: 'ho smesso di spiegarlo. non riuscivo a farlo sembrare abbastanza.' },
       { t: 'Ho continuato a difendere la mia strada, anche quando nessuno me lo chiedeva.', s:{c:3,a:1,f:0}, thought: 'ho continuato. non sempre con convinzione. ma ho continuato.' },
@@ -349,14 +349,14 @@ const MEMORIES = [
     text: 'A sedici anni tutti sembravano già sapere chi erano. Avevano passioni, piani, certezze.',
     ctx: 'Tu guardavi e non capivi cosa stavi sbagliando.',
     choices: [
-      { t: 'Ho provato a somigliargli. Ho preso le loro passioni e le ho fatte mie.', s:{c:0,a:0,f:3}, thought: 'ho preso le loro certezze come se fossero mie. non lo erano.' },
-      { t: 'Ho smesso di confrontarmi. O almeno ci ho provato.', s:{c:1,a:2,f:0}, thought: 'ho provato a smettere di guardarli. non sempre ci sono riuscito.' },
+      { t: 'Ho provato a somigliargli, inseguendo le loro passioni e facendole mie.', s:{c:0,a:0,f:3}, thought: 'ho preso le loro certezze come se fossero mie. non lo erano.' },
+      { t: 'Ho smesso di confrontarmi con gli altri. O almeno ci ho provato.', s:{c:1,a:2,f:0}, thought: 'ho provato a smettere di guardarli. non sempre ci sono riuscito.' },
     ]
   },
   {
     label: 'ricordo 03 — la scelta',
     text: 'Hai dovuto scegliere un percorso. Tutti ti chiedevano cosa volevi fare nella vita.',
-    ctx: 'Come se fosse una domanda con una risposta.',
+    ctx: 'Come se fosse semplice dare una risposta.',
     choices: [
       { t: 'Ho scelto qualcosa di ragionevole. Non ne ero sicuro, ma aveva senso.', s:{c:0,a:1,f:2}, thought: 'ho scelto il ragionevole. non so se era mio.' },
       { t: 'Ho scelto quello che mi emozionava, senza sapere dove portava.', s:{c:3,a:1,f:0}, thought: 'ho scelto senza sapere dove portava. ho ancora paura che fosse sbagliato.' },
@@ -365,10 +365,10 @@ const MEMORIES = [
   {
     label: 'ricordo 04 — la domanda degli altri',
     text: 'Le persone continuano a chiedere. E dopo? Cosa farai? Hai un piano?',
-    ctx: 'E tu non sai come rispondere senza mentire.',
+    ctx: 'Spesso non sai rispondere senza mentire.',
     choices: [
       { t: 'Ho imparato a dare risposte vaghe che sembrano risposte vere.', s:{c:0,a:0,f:3}, thought: 'ho imparato a sembrare sicuro. è diverso dall\'esserlo.' },
-      { t: 'Ho detto che non lo so ancora. Ho visto la loro faccia cambiare.', s:{c:2,a:2,f:0}, thought: 'ho detto che non lo so. non è stato bello. ma almeno era vero.' },
+      { t: 'Ho detto che non lo so ancora. Ho visto la loro espressione cambiare.', s:{c:2,a:2,f:0}, thought: 'ho detto che non lo so. non è stato bello. ma almeno era vero.' },
     ]
   },
   {
@@ -483,7 +483,7 @@ function getFinale(s) {
     ]};
 
   if (pC > pA && pC > pF) return {
-    t: 'Qualcuno in movimento, con ancora paura',
+    t: 'Qualcuno in movimento, che ha ancora paura',
     b: [
       'Non hai ancora le risposte.',
       'Ma sei andato avanti lo stesso.',
