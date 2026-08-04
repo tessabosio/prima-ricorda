@@ -275,7 +275,6 @@
         <div class="iline dim" data-text="Trovala e salila: porta al piano sopra."></div>
         <div class="iline sp"  data-text=" "></div>
         <div class="iline dim" data-text="*↑ ↓* &nbsp;camminare &nbsp;&nbsp; *← →* &nbsp;girare"></div>
-        <div class="iline dim" data-text="*SHIFT* &nbsp;correre &nbsp;&nbsp; *M* &nbsp;mappa"></div>
       </div>
     </div>
   </div>
@@ -321,10 +320,10 @@
 </div>
 
 <div class="screen solid" id="finale">
-  <div class="flabel">dalle dodici risposte che hai dato</div>
+  <div class="flabel">profilo emerso dalle risposte date</div>
   <h2 class="ftitle" id="ftitle"></h2>
   <p class="fbody"   id="fbody"></p>
-  <div class="fbars-lbl">come hai attraversato i ricordi</div>
+  <div class="fbars-lbl">le tue scelte</div>
   <div class="bars"  id="bars"></div>
   <button class="btn" id="btn-restart">torna alla home</button>
 </div>
@@ -341,17 +340,17 @@ const MEMORIES = [
     text: 'Qualcuno in famiglia sembra aver scelto la strada giusta. Quella concreta, quella che si capisce, quella di cui si parla con orgoglio.',
     ctx: 'Io ancora non ho trovato la mia strada.',
     choices: [
-      { t: 'Ho smesso di parlare di quello che faccio. È più semplice cambiare argomento.', s:{c:0,a:1,f:3}, thought: 'ho smesso di spiegarlo. non riuscivo a farlo sembrare abbastanza.' },
+      { t: 'Ho smesso di parlare di quello che faccio, è più semplice cambiare argomento.', s:{c:0,a:1,f:3}, thought: 'ho smesso di spiegarlo. non riuscivo a farlo sembrare abbastanza.' },
       { t: 'Ho continuato a difendere la mia strada, anche quando nessuno me lo chiedeva.', s:{c:3,a:1,f:0}, thought: 'ho continuato. non sempre con convinzione. ma ho continuato.' },
     ]
   },
   {
     label: 'ricordo 02 — il confronto',
-    text: 'A sedici anni tutti sembravano già sapere chi erano. Avevano passioni, piani, certezze.',
+    text: 'A sedici anni tutti sembravano già sapere chi erano, avevano passioni, piani, certezze.',
     ctx: 'Tu guardavi e non capivi cosa stavi sbagliando.',
     choices: [
       { t: 'Ho provato a somigliargli, inseguendo le loro passioni e facendole mie.', s:{c:0,a:0,f:3}, thought: 'ho preso le loro certezze come se fossero mie. non lo erano.' },
-      { t: 'Ho smesso di confrontarmi con gli altri. O almeno ci ho provato.', s:{c:1,a:2,f:0}, thought: 'ho provato a smettere di guardarli. non sempre ci sono riuscito.' },
+      { t: 'Ho smesso di confrontarmi con gli altri, o almeno ci ho provato.', s:{c:1,a:2,f:0}, thought: 'ho provato a smettere di guardarli. non sempre ci sono riuscito.' },
     ]
   },
   {
@@ -365,16 +364,16 @@ const MEMORIES = [
   },
   {
     label: 'ricordo 04 — la domanda degli altri',
-    text: 'Le persone continuano a chiedere. E dopo? Cosa farai? Hai un piano?',
+    text: 'Le persone continuano a chiedere: e dopo? cosa farai? hai un piano?',
     ctx: 'Spesso non sai rispondere senza mentire.',
     choices: [
       { t: 'Ho imparato a dare risposte vaghe che sembrano risposte vere.', s:{c:0,a:0,f:3}, thought: 'ho imparato a sembrare sicuro. è diverso dall\'esserlo.' },
-      { t: 'Ho detto che non lo so ancora. Ho visto la loro espressione cambiare.', s:{c:2,a:2,f:0}, thought: 'ho detto che non lo so. non è stato bello. ma almeno era vero.' },
+      { t: 'Ho detto che non lo so ancora e la loro espressione è cambiata.', s:{c:2,a:2,f:0}, thought: 'ho detto che non lo so. non è stato bello. ma almeno era vero.' },
     ]
   },
   {
     label: 'ricordo 05 — la paura di sbagliare',
-    text: 'Ogni scelta sembra definitiva. Come se sbagliare direzione volesse dire perdere tutto.',
+    text: 'Ogni scelta sembra definitiva, come se sbagliare direzione volesse dire perdere tutto.',
     ctx: 'Così non scegli. Aspetti.',
     choices: [
       { t: 'Ho aspettato che qualcosa si chiarisse da solo. Ho aspettato a lungo.', s:{c:0,a:0,f:3}, thought: 'ho aspettato. aspettare è comodo finché non diventa il tuo unico modo di stare.' },
@@ -383,11 +382,11 @@ const MEMORIES = [
   },
   {
     label: 'ricordo 06 — gli altri che avanzano',
-    text: 'Guardi chi ti sta intorno e sembra che tutti stiano andando avanti. Lavori, master, progetti.',
+    text: 'Guardi chi ti sta intorno e sembra che tutti stiano andando avanti con lavori, master e progetti.',
     ctx: 'Tu sei ancora fermo a chiederti da dove cominciare.',
     choices: [
-      { t: 'Mi sono convinto di essere in ritardo. Di aver già perso qualcosa.', s:{c:0,a:0,f:3}, thought: 'mi sono convinto di essere indietro. forse non esiste un avanti e un indietro.' },
-      { t: 'Ho provato a ricordarmi che ognuno ha i suoi tempi. Non sempre ci credo.', s:{c:1,a:3,f:0}, thought: 'ho provato a darmi tempo. non sempre ci riesco. ma ci provo.' },
+      { t: 'Mi sono convinto di essere in ritardo, di aver già perso qualcosa.', s:{c:0,a:0,f:3}, thought: 'mi sono convinto di essere indietro. forse non esiste un avanti e un indietro.' },
+      { t: 'Ho provato a ricordarmi che ognuno ha i suoi tempi, ma non sempre ci credo.', s:{c:1,a:3,f:0}, thought: 'ho provato a darmi tempo. non sempre ci riesco. ma ci provo.' },
     ]
   },
   {
@@ -401,25 +400,25 @@ const MEMORIES = [
   },
   {
     label: 'ricordo 08 — cosa ti piace',
-    text: 'Qualcuno ti ha chiesto cosa ti piace davvero fare. Non per lavoro. Per te.',
+    text: 'Qualcuno ti ha chiesto cosa ti piace davvero fare. Non per lavoro, per te.',
     ctx: 'Hai esitato più di quanto ti aspettassi.',
     choices: [
       { t: 'Ho risposto con quello che pensavo dovesse piacermi.', s:{c:0,a:1,f:2}, thought: 'ho risposto quello che sembrava giusto. non so se era vero.' },
-      { t: 'Ho detto la prima cosa che mi è venuta in mente, prima di censurarla.', s:{c:3,a:1,f:0}, thought: 'ho detto la prima cosa. forse è là, la risposta.' },
+      { t: 'Ho detto la verità, prima di censurarla.', s:{c:3,a:1,f:0}, thought: 'ho detto la prima cosa. forse è là, la risposta.' },
     ]
   },
   {
     label: 'ricordo 09 — la voce in testa',
     text: 'C\'è una voce che dice che non sei abbastanza brava per quello che vuoi fare.',
-    ctx: 'Non sai da dove viene. Ma è sempre lì.',
+    ctx: 'Non sai da dove viene, ma è sempre lì.',
     choices: [
-      { t: 'Le ho dato ragione. Ho ridimensionato i miei sogni per non fallire.', s:{c:0,a:1,f:3}, thought: 'le ho dato ragione. ho smesso di desiderare in grande. è più sicuro.' },
+      { t: 'Le ho dato ragione e ho ridimensionato i miei sogni per non fallire.', s:{c:0,a:1,f:3}, thought: 'le ho dato ragione. ho smesso di desiderare in grande. è più sicuro.' },
       { t: 'Ho provato a ignorarla. Non sempre ci riesco, ma ci provo.', s:{c:3,a:1,f:0}, thought: 'provo a ignorarla. alcune giornate ci riesco. altre no.' },
     ]
   },
   {
     label: 'ricordo 10 — il progetto',
-    text: 'Hai avuto un\'idea. Qualcosa che ti accendeva davvero. Per un momento hai pensato: forse è questa.',
+    text: 'Hai avuto un\'idea, qualcosa che ti accendeva davvero. Per un momento hai pensato: forse è questa.',
     ctx: 'Poi hai iniziato a dubitare.',
     choices: [
       { t: 'Ho abbandonato l\'idea prima di darle una possibilità.', s:{c:0,a:1,f:3}, thought: 'ho abbandonato prima di provare. non saprò mai com\'era andata.' },
@@ -428,7 +427,7 @@ const MEMORIES = [
   },
   {
     label: 'ricordo 11 — parlarne',
-    text: 'Hai provato a parlare di questa ansia con qualcuno. Di non sapere cosa fare.',
+    text: 'Hai provato a parlare di questa ansia con qualcuno, del non sapere cosa fare.',
     ctx: 'Non è sempre andata bene.',
     choices: [
       { t: 'Mi hanno detto che è normale, che passa. Non mi ha aiutato molto.', s:{c:0,a:1,f:2}, thought: 'mi hanno detto che è normale. forse lo è. ma sentirlo non aiuta.' },
@@ -440,8 +439,8 @@ const MEMORIES = [
     text: 'Sei qui. Ancora senza certezze. Ancora senza sapere dove stai andando.',
     ctx: 'Ma sei arrivato fin qui.',
     choices: [
-      { t: '"Non so cosa fare. E sto imparando a stare in questo non sapere."', s:{c:2,a:3,f:0}, thought: 'non so ancora. ma forse non sapere non è sbagliato. è solo onesto.' },
-      { t: '"Ho ancora paura del futuro. Ma non mi fermo per questo."', s:{c:3,a:2,f:0}, thought: 'ho paura. continuo lo stesso. forse è questo il coraggio.' },
+      { t: 'Non so cosa fare ma sto imparando a stare in questo non sapere.', s:{c:2,a:3,f:0}, thought: 'non so ancora. ma forse non sapere non è sbagliato. è solo onesto.' },
+      { t: 'Ho ancora paura del futuro ma non mi fermo per questo.', s:{c:3,a:2,f:0}, thought: 'ho paura. continuo lo stesso. forse è questo il coraggio.' },
     ]
   },
 ];
@@ -473,7 +472,7 @@ function getFinale(s) {
     ]};
 
   if (pA > .42) return {
-    t: 'Qualcuno che sa stare nell\'incertezza',
+    t: 'Qualcuno che sa abitare l\'incertezza',
     b: [
       'Hai imparato a non fuggire dal non sapere.',
       'A tenerlo, a conviverci.',
@@ -494,7 +493,7 @@ function getFinale(s) {
     ]};
 
   if (pA > pC && pA > pF) return {
-    t: 'Qualcuno che sa portare il peso',
+    t: 'Qualcuno che sa portare il peso della realtà',
     b: [
       'Non fuggi da ciò che pesa.',
       'Lo tieni con te.',
