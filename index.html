@@ -34,18 +34,17 @@
   /* INTRO */
   #intro-grid {
     display: grid;
-    grid-template-columns: auto auto;
+    grid-template-columns: 400px 400px;
     gap: 0 64px;
     justify-content: center;
     width: 100%;
     align-items: start;
   }
-  #intro-guide {
-    border-left: 1px solid rgba(255,255,255,0.12);
-    padding-left: 44px;
-    opacity: 0; transition: opacity .7s ease;
-  }
-  #intro-guide.show { opacity: 1; }
+  #intro-guide { border-left: 1px solid rgba(255,255,255,0.12); padding-left: 44px; }
+  #intro-guide .col-lbl,
+  #intro-guide .col-body { opacity: 0; transition: opacity .7s ease; }
+  #intro-guide.show .col-lbl,
+  #intro-guide.show .col-body { opacity: 1; }
   .col-lbl {
     font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: .26em;
     color: rgba(255,255,255,0.45); margin-bottom: 22px;
@@ -65,28 +64,29 @@
   @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
   #intro-cta { margin-top: 52px; opacity: 0; transition: opacity .8s; align-self: center; }
   #intro-cta.show { opacity: 1; }
-  #skip-hint {
-    margin-top: 24px; font-family: 'DM Mono', monospace; font-weight: 300;
-    font-size: 11px; letter-spacing: 0.14em; color: rgba(255,255,255,0.62);
-    opacity: 0; transition: opacity 0.6s;
-  }
+  #skip-hint.btn { margin-top: 52px; }
 
   /* HUD — nav in alto a sinistra */
   #game-nav {
     position: fixed; top: 26px; left: 26px; z-index: 40;
-    display: none; flex-direction: column; gap: 10px;
+    display: none; flex-direction: column; gap: 6px;
+    transition: opacity .45s ease;
   }
+  #game-nav.walking { opacity: 0.10; }
+  #game-nav.hidden { opacity: 0; pointer-events: none; }
+  #counter.hidden { opacity: 0; }
+  #counter.walking { opacity: 0.12; }
   #game-nav.visible { display: flex; }
   #game-nav.music-only .nav-btn { display: none; }
   #game-nav.music-only #global-music-btn { display: block; }
   .nav-btn {
     font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: .12em;
-    color: rgba(255,255,255,0.92); background: rgba(0,0,0,0.32);
-    border: 1px solid rgba(255,255,255,0.34); border-radius: 3px;
+    color: rgba(255,255,255,0.5); background: rgba(0,0,0,0.22);
+    border: 1px solid rgba(255,255,255,0.16); border-radius: 3px;
     padding: 8px 13px; cursor: pointer; text-align: left; min-width: 148px;
     transition: color .2s, border-color .2s, background .2s;
   }
-  .nav-btn:hover { color: #fff; border-color: rgba(255,255,255,0.85); background: rgba(0,0,0,0.55); }
+  .nav-btn:hover { color: #fff; border-color: rgba(255,255,255,0.7); background: rgba(0,0,0,0.5); }
 
   /* popup comandi */
   #commands-popup {
@@ -107,7 +107,7 @@
   }
   #commands-popup .cmd-close:hover { color: #fff; }
 
-  #counter { position: fixed; top: 30px; left: 50%; transform: translateX(-50%); font-size: 10px; letter-spacing: .14em; color: rgba(255,255,255,0.92); pointer-events: none; z-index: 10; text-shadow: 0 0 14px rgba(0,0,0,0.95); }
+  #counter { opacity: 1; transition: opacity .45s ease; position: fixed; top: 30px; left: 50%; transform: translateX(-50%); font-size: 10px; letter-spacing: .14em; color: rgba(255,255,255,0.45); pointer-events: none; z-index: 10; text-shadow: 0 0 14px rgba(0,0,0,0.95); }
   #prox { position: fixed; bottom: 48px; left: 50%; transform: translateX(-50%); font-size: 10px; letter-spacing: .14em; color: rgba(255,250,215,1); pointer-events: none; z-index: 10; opacity: 0; transition: opacity .3s; text-shadow: 0 0 14px rgba(0,0,0,0.95); }
 
   /* MINIMAP */
@@ -137,21 +137,28 @@
   #cross::after  { height: 1px; width: 100%; top: 50%; }
 
   /* MEMORY PANEL */
+  /* velo luminoso: la luce del nucleo invade lo schermo prima della scheda */
+  #glare {
+    position: fixed; inset: 0; z-index: 28;
+    background: radial-gradient(circle at 50% 50%, #fff8e4 0%, #f5ecd8 45%, #efe6d4 100%);
+    opacity: 0; pointer-events: none;
+    transition: opacity 1.1s ease;
+  }
+  #glare.on { opacity: 1; }
+
   #panel {
     position: fixed; inset: 0;
     display: flex; align-items: center; justify-content: center;
     z-index: 30; pointer-events: none; opacity: 0;
-    transition: opacity .8s ease;
-    background: rgba(0,0,0,0.7);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    transition: opacity .9s ease .35s;
+    background: transparent;
   }
   #panel.open { opacity: 1; pointer-events: all; }
 
   .card {
     width: min(640px, 88vw);
-    background: #a6a29a;
-    border: none;
+    background: #f0e8d8;
+    border: 1px solid #14120f;
     border-radius: 4px;
     padding: 46px 52px;
     box-shadow: 0 20px 70px rgba(0,0,0,0.85);
@@ -160,15 +167,15 @@
   }
   #panel:not(.open) .card { transform: translateY(20px); }
 
-  .mlabel { font-size: 10px; letter-spacing: .22em; color: rgba(0,0,0,0.5); margin-bottom: 20px; text-transform: uppercase; }
-  .mtext { font-family: 'DM Serif Display', serif; font-size: clamp(20px,2.6vw,30px); color: #100e0b; line-height: 1.45; margin-bottom: 14px; font-weight: 400; text-wrap: balance; }
-  .mctx { font-size: 14px; font-weight: 300; color: rgba(0,0,0,0.68); letter-spacing: .02em; line-height: 1.7; margin-bottom: 34px; text-wrap: balance; }
+  .mlabel { font-size: 10px; letter-spacing: .22em; color: rgba(0,0,0,0.45); margin-bottom: 20px; text-transform: uppercase; }
+  .mtext { font-family: 'DM Serif Display', serif; font-size: clamp(20px,2.6vw,30px); color: #0d0b08; line-height: 1.45; margin-bottom: 14px; font-weight: 400; text-wrap: balance; }
+  .mctx { font-size: 14px; font-weight: 300; color: rgba(0,0,0,0.62); letter-spacing: .02em; line-height: 1.7; margin-bottom: 34px; text-wrap: balance; }
   .choices { display: flex; flex-direction: column; gap: 10px; }
   .cbtn {
     font-family: 'DM Mono', monospace; font-size: 14px; font-weight: 300;
-    letter-spacing: .01em; color: #16140f;
+    letter-spacing: .01em; color: #0d0b08;
     background: transparent;
-    border: 1px solid rgba(0,0,0,0.38); border-radius: 3px;
+    border: 1px solid rgba(0,0,0,0.45); border-radius: 3px;
     padding: 16px 20px; cursor: pointer; text-align: left;
     transition: border-color .2s, background .2s, transform .15s;
     line-height: 1.65; text-wrap: pretty;
@@ -182,20 +189,21 @@
 
   /* FINALE */
   #finale.open { opacity: 1; pointer-events: all; }
-  .flabel { font-size: 13px; letter-spacing: .18em; color: rgba(255,255,255,0.45); margin-bottom: 22px; text-align: center; }
-  .ftitle { font-family: 'DM Serif Display', serif; font-size: clamp(28px,4vw,52px); font-weight: 400; color: #fff; text-align: center; max-width: 700px; line-height: 1.2; margin-bottom: 26px; text-wrap: balance; }
-  .ftitle em { font-style: italic; color: rgba(255,248,200,0.75); }
-  .fbody { font-size: clamp(14px,1.5vw,17px); font-weight: 300; color: rgba(255,255,255,0.7); line-height: 1.9; letter-spacing: .01em; text-align: center; margin-bottom: 46px; }
-  .fline { display: block; white-space: nowrap; }
-  .fgap  { display: block; height: 18px; }
-  .fbody strong { color: #fff; font-weight: 400; }
-  .fbars-lbl { font-size: 12px; letter-spacing: .16em; color: rgba(255,255,255,0.35); margin-bottom: 18px; }
-  .bars { display: flex; gap: 46px; margin-bottom: 46px; align-items: flex-end; }
-  .bar-item { display: flex; flex-direction: column; align-items: center; gap: 10px; }
-  .bar-track { width: 6px; height: 84px; background: rgba(255,255,255,0.1); border-radius: 3px; display: flex; flex-direction: column; justify-content: flex-end; }
-  .bar-fill { width: 100%; border-radius: 3px; background: rgba(255,248,200,0.75); transition: height 1.5s ease; }
-  .bar-lbl { font-size: 13px; letter-spacing: .1em; color: rgba(255,255,255,0.55); }
-  .bar-pct { font-size: 12px; letter-spacing: .08em; color: rgba(255,248,200,0.8); }
+  #finale.solid { background: #f0e8d8; }
+  #finale .btn { color: rgba(0,0,0,0.65); border-color: rgba(0,0,0,0.35); }
+  #finale .btn:hover { color: #000; border-color: rgba(0,0,0,0.8); }
+  .flabel { font-size: 13px; letter-spacing: .18em; color: rgba(0,0,0,0.5); margin-bottom: 22px; text-align: center; }
+  .ftitle { font-family: 'DM Serif Display', serif; font-size: clamp(28px,4vw,52px); font-weight: 400; color: #0d0b08; text-align: center; max-width: 700px; line-height: 1.2; margin-bottom: 26px; text-wrap: balance; }
+  .ftitle em { font-style: italic; color: rgba(0,0,0,0.55); }
+  .fbody { font-size: clamp(15px,1.6vw,18px); font-weight: 300; color: #0d0b08; line-height: 1.95; letter-spacing: .01em; text-align: center; margin-bottom: 46px; max-width: 640px; text-wrap: balance; }
+  .fbody strong { color: #0d0b08; font-weight: 400; }
+  .fbars-lbl { font-size: 12px; letter-spacing: .16em; color: rgba(0,0,0,0.5); margin-bottom: 18px; }
+  .bars { display: flex; gap: 64px; margin-bottom: 46px; align-items: center; justify-content: center; }
+  .bar-item { display: flex; flex-direction: column; align-items: center; gap: 10px; width: 96px; }
+  .bar-track { width: 6px; height: 84px; background: rgba(0,0,0,0.12); border-radius: 3px; display: flex; flex-direction: column; justify-content: flex-end; }
+  .bar-fill { width: 100%; border-radius: 3px; background: rgba(0,0,0,0.65); transition: height 1.5s ease; }
+  .bar-lbl { font-size: 13px; letter-spacing: .1em; color: rgba(0,0,0,0.6); }
+  .bar-pct { font-size: 12px; letter-spacing: .08em; color: rgba(0,0,0,0.75); }
 
   #mobile-block {
     position: fixed; inset: 0; z-index: 200;
@@ -265,21 +273,22 @@
     <div id="intro-guide">
       <div class="col-lbl">COME</div>
       <div class="col-body">
-        <div class="iline dim" data-text="Il labirinto ha *tre piani*."></div>
-        <div class="iline dim" data-text="Su ogni piano fluttuano *quattro nuclei*."></div>
+        <div class="iline dim" data-text="Il labirinto ha *tre piani*, sempre diversi."></div>
+        <div class="iline dim" data-text="Su ognuno fluttuano *quattro nuclei*."></div>
         <div class="iline dim" data-text="Avvicinati a un nucleo e premi *SPAZIO*:"></div>
         <div class="iline dim" data-text="si aprirà un ricordo da attraversare."></div>
         <div class="iline sp"  data-text=" "></div>
-        <div class="iline dim" data-text="Quando li hai attraversati tutti e quattro,"></div>
-        <div class="iline dim" data-text="da qualche parte compare una *scala*."></div>
+        <div class="iline dim" data-text="Una volta attraversati tutti i nuclei,"></div>
+        <div class="iline dim" data-text="comprarirà una *scala* da percorrere."></div>
         <div class="iline dim" data-text="Trovala e salila: porta al piano sopra."></div>
         <div class="iline sp"  data-text=" "></div>
-        <div class="iline dim" data-text="*↑ ↓* &nbsp;camminare &nbsp;&nbsp; *← →* &nbsp;girare"></div>
+        <div class="iline dim" data-text="*↑ ↓* &nbsp;camminare &nbsp;&nbsp; *MOUSE* &nbsp;guardarsi intorno"></div>
+        <div class="iline dim" data-text="*SHIFT* &nbsp;correre &nbsp;&nbsp; *SPAZIO* &nbsp;ricordare"></div>
       </div>
     </div>
   </div>
   <div id="intro-cta"><button class="btn" id="btn-enter">continua</button></div>
-  <div id="skip-hint">premi SPAZIO per saltare</div>
+  <button class="btn" id="skip-hint">premi SPAZIO per saltare</button>
 </div>
 
 <div id="thought"></div>
@@ -311,6 +320,7 @@
 </div>
 
 <!-- MEMORY PANEL -->
+<div id="glare"></div>
 <div id="panel">
   <div class="card">
     <div class="mtext"  id="mtext"></div>
@@ -337,11 +347,11 @@
 const MEMORIES = [
   {
     label: 'ricordo 01 — la famiglia',
-    text: 'Qualcuno in famiglia sembra aver scelto la strada giusta. Quella concreta, quella che si capisce, quella di cui si parla con orgoglio.',
+    text: 'Qualcuno in famiglia sembra aver scelto la strada giusta, quella concreta, quella che si capisce, quella di cui si parla con orgoglio.',
     ctx: 'Io ancora non ho trovato la mia strada.',
     choices: [
-      { t: 'Ho smesso di parlare di quello che faccio, è più semplice cambiare argomento.', s:{c:0,a:1,f:3}, thought: 'ho smesso di spiegarlo. non riuscivo a farlo sembrare abbastanza.' },
-      { t: 'Ho continuato a difendere la mia strada, anche quando nessuno me lo chiedeva.', s:{c:3,a:1,f:0}, thought: 'ho continuato. non sempre con convinzione. ma ho continuato.' },
+      { t: 'Ho smesso di parlare di quello che faccio, è più semplice cambiare argomento.', s:{c:0,a:1,f:3}, thought: 'ho smesso di spiegarlo, non riuscivo a farlo sembrare abbastanza.' },
+      { t: 'Ho continuato a difendere la mia strada, anche quando nessuno me lo chiedeva.', s:{c:3,a:1,f:0}, thought: 'ho continuato, non sempre con convinzione, ma ho continuato.' },
     ]
   },
   {
@@ -349,17 +359,17 @@ const MEMORIES = [
     text: 'A sedici anni tutti sembravano già sapere chi erano, avevano passioni, piani, certezze.',
     ctx: 'Tu guardavi e non capivi cosa stavi sbagliando.',
     choices: [
-      { t: 'Ho provato a somigliargli, inseguendo le loro passioni e facendole mie.', s:{c:0,a:0,f:3}, thought: 'ho preso le loro certezze come se fossero mie. non lo erano.' },
-      { t: 'Ho smesso di confrontarmi con gli altri, o almeno ci ho provato.', s:{c:1,a:2,f:0}, thought: 'ho provato a smettere di guardarli. non sempre ci sono riuscito.' },
+      { t: 'Ho provato a somigliargli, inseguendo le loro passioni e facendole mie.', s:{c:0,a:0,f:3}, thought: 'ho preso le loro certezze come se fossero mie, ma non lo erano.' },
+      { t: 'Ho smesso di confrontarmi con gli altri, o almeno ci ho provato.', s:{c:1,a:2,f:0}, thought: 'ho provato a smettere di guardarli, non sempre ci sono riuscito.' },
     ]
   },
   {
     label: 'ricordo 03 — la scelta',
-    text: 'Hai dovuto scegliere un percorso. Tutti ti chiedevano cosa volevi fare nella vita.',
+    text: 'Hai dovuto scegliere un percorso, e tutti ti chiedevano cosa volevi fare nella vita.',
     ctx: 'Come se fosse semplice dare una risposta.',
     choices: [
-      { t: 'Ho scelto qualcosa di ragionevole. Non ne ero sicuro, ma aveva senso.', s:{c:0,a:1,f:2}, thought: 'ho scelto il ragionevole. non so se era mio.' },
-      { t: 'Ho scelto quello che mi emozionava, senza sapere dove portava.', s:{c:3,a:1,f:0}, thought: 'ho scelto senza sapere dove portava. ho ancora paura che fosse sbagliato.' },
+      { t: 'Ho scelto qualcosa di ragionevole, non ne ero sicuro ma aveva senso.', s:{c:0,a:1,f:2}, thought: 'ho scelto il ragionevole, non so se era mio.' },
+      { t: 'Ho scelto quello che mi emozionava, senza sapere dove portava.', s:{c:3,a:1,f:0}, thought: 'ho scelto senza sapere dove portava, e ho ancora paura che fosse sbagliato.' },
     ]
   },
   {
@@ -368,16 +378,16 @@ const MEMORIES = [
     ctx: 'Spesso non sai rispondere senza mentire.',
     choices: [
       { t: 'Ho imparato a dare risposte vaghe che sembrano risposte vere.', s:{c:0,a:0,f:3}, thought: 'ho imparato a sembrare sicuro. è diverso dall\'esserlo.' },
-      { t: 'Ho detto che non lo so ancora e la loro espressione è cambiata.', s:{c:2,a:2,f:0}, thought: 'ho detto che non lo so. non è stato bello. ma almeno era vero.' },
+      { t: 'Ho detto che non lo so ancora e la loro espressione è cambiata.', s:{c:2,a:2,f:0}, thought: 'ho detto che non lo so, non è stato bello, ma almeno era vero.' },
     ]
   },
   {
     label: 'ricordo 05 — la paura di sbagliare',
     text: 'Ogni scelta sembra definitiva, come se sbagliare direzione volesse dire perdere tutto.',
-    ctx: 'Così non scegli. Aspetti.',
+    ctx: 'Così non scegli, aspetti.',
     choices: [
-      { t: 'Ho aspettato che qualcosa si chiarisse da solo. Ho aspettato a lungo.', s:{c:0,a:0,f:3}, thought: 'ho aspettato. aspettare è comodo finché non diventa il tuo unico modo di stare.' },
-      { t: 'Ho fatto qualcosa, anche senza certezze. Solo per non stare fermo.', s:{c:2,a:2,f:0}, thought: 'ho fatto qualcosa. non era giusto. ma mi ha mosso.' },
+      { t: 'Ho aspettato che qualcosa si chiarisse da solo, e ho aspettato a lungo.', s:{c:0,a:0,f:3}, thought: 'ho aspettato, e aspettare è comodo finché non diventa l\'unico modo di stare.' },
+      { t: 'Ho fatto qualcosa anche senza certezze, solo per non stare fermo.', s:{c:2,a:2,f:0}, thought: 'ho fatto qualcosa, non era giusto, ma mi ha mosso.' },
     ]
   },
   {
@@ -385,26 +395,26 @@ const MEMORIES = [
     text: 'Guardi chi ti sta intorno e sembra che tutti stiano andando avanti con lavori, master e progetti.',
     ctx: 'Tu sei ancora fermo a chiederti da dove cominciare.',
     choices: [
-      { t: 'Mi sono convinto di essere in ritardo, di aver già perso qualcosa.', s:{c:0,a:0,f:3}, thought: 'mi sono convinto di essere indietro. forse non esiste un avanti e un indietro.' },
-      { t: 'Ho provato a ricordarmi che ognuno ha i suoi tempi, ma non sempre ci credo.', s:{c:1,a:3,f:0}, thought: 'ho provato a darmi tempo. non sempre ci riesco. ma ci provo.' },
+      { t: 'Mi sono convinto di essere in ritardo, di aver già perso qualcosa.', s:{c:0,a:0,f:3}, thought: 'mi sono convinto di essere indietro, ma forse non esiste un avanti e un indietro.' },
+      { t: 'Ho provato a ricordarmi che ognuno ha i suoi tempi, ma non sempre ci credo.', s:{c:1,a:3,f:0}, thought: 'ho provato a darmi tempo, non sempre ci riesco ma ci provo.' },
     ]
   },
   {
     label: 'ricordo 07 — la notte',
-    text: 'Di notte l\'ansia sale. Pensi al futuro e non vedi niente. Solo buio.',
+    text: 'Di notte l\'ansia sale, pensi al futuro e non vedi niente, solo buio.',
     ctx: 'Come adesso.',
     choices: [
-      { t: 'Mi sono distratto. Qualsiasi cosa pur di non pensare.', s:{c:0,a:0,f:3}, thought: 'mi sono distratta. funzionava. finché non tornava tutto, più forte.' },
-      { t: 'Sono rimasto con quella sensazione. Non è passata subito, ma è passata.', s:{c:2,a:3,f:0}, thought: 'sono rimasto con l\'ansia. è passata. torna. ma passa.' },
+      { t: 'Mi sono distratto con qualsiasi cosa, pur di non pensare.', s:{c:0,a:0,f:3}, thought: 'mi sono distratto e funzionava, finché non tornava tutto più forte.' },
+      { t: 'Sono rimasto con quella sensazione, non è passata subito ma è passata.', s:{c:2,a:3,f:0}, thought: 'sono rimasto con l\'ansia, è passata, torna, ma passa.' },
     ]
   },
   {
     label: 'ricordo 08 — cosa ti piace',
-    text: 'Qualcuno ti ha chiesto cosa ti piace davvero fare. Non per lavoro, per te.',
+    text: 'Qualcuno ti ha chiesto cosa ti piace davvero fare, non per lavoro ma per te.',
     ctx: 'Hai esitato più di quanto ti aspettassi.',
     choices: [
-      { t: 'Ho risposto con quello che pensavo dovesse piacermi.', s:{c:0,a:1,f:2}, thought: 'ho risposto quello che sembrava giusto. non so se era vero.' },
-      { t: 'Ho detto la verità, prima di censurarla.', s:{c:3,a:1,f:0}, thought: 'ho detto la prima cosa. forse è là, la risposta.' },
+      { t: 'Ho risposto con quello che pensavo dovesse piacermi.', s:{c:0,a:1,f:2}, thought: 'ho risposto quello che sembrava giusto, non so se era vero.' },
+      { t: 'Ho detto la verità, prima di censurarla.', s:{c:3,a:1,f:0}, thought: 'ho detto la prima cosa che mi è venuta, forse la risposta è là.' },
     ]
   },
   {
@@ -412,17 +422,17 @@ const MEMORIES = [
     text: 'C\'è una voce che dice che non sei abbastanza brava per quello che vuoi fare.',
     ctx: 'Non sai da dove viene, ma è sempre lì.',
     choices: [
-      { t: 'Le ho dato ragione e ho ridimensionato i miei sogni per non fallire.', s:{c:0,a:1,f:3}, thought: 'le ho dato ragione. ho smesso di desiderare in grande. è più sicuro.' },
-      { t: 'Ho provato a ignorarla. Non sempre ci riesco, ma ci provo.', s:{c:3,a:1,f:0}, thought: 'provo a ignorarla. alcune giornate ci riesco. altre no.' },
+      { t: 'Le ho dato ragione e ho ridimensionato i miei sogni per non fallire.', s:{c:0,a:1,f:3}, thought: 'le ho dato ragione e ho smesso di desiderare in grande, è più sicuro.' },
+      { t: 'Ho provato a ignorarla, non sempre ci riesco ma ci provo.', s:{c:3,a:1,f:0}, thought: 'provo a ignorarla, alcune giornate ci riesco e altre no.' },
     ]
   },
   {
     label: 'ricordo 10 — il progetto',
-    text: 'Hai avuto un\'idea, qualcosa che ti accendeva davvero. Per un momento hai pensato: forse è questa.',
+    text: 'Hai avuto un\'idea che ti accendeva davvero, e per un momento hai pensato che forse era quella.',
     ctx: 'Poi hai iniziato a dubitare.',
     choices: [
-      { t: 'Ho abbandonato l\'idea prima di darle una possibilità.', s:{c:0,a:1,f:3}, thought: 'ho abbandonato prima di provare. non saprò mai com\'era andata.' },
-      { t: 'Ho continuato nonostante il dubbio. Ho fatto qualcosa con quell\'idea.', s:{c:3,a:2,f:0}, thought: 'ho continuato nonostante il dubbio. è ancora lì, quell\'idea.' },
+      { t: 'Ho abbandonato l\'idea prima di darle una possibilità.', s:{c:0,a:1,f:3}, thought: 'ho abbandonato prima di provare, non saprò mai com\'era andata.' },
+      { t: 'Ho continuato nonostante il dubbio, e ho fatto qualcosa con quell\'idea.', s:{c:3,a:2,f:0}, thought: 'ho continuato nonostante il dubbio, e quell\'idea è ancora lì.' },
     ]
   },
   {
@@ -430,8 +440,8 @@ const MEMORIES = [
     text: 'Hai provato a parlare di questa ansia con qualcuno, del non sapere cosa fare.',
     ctx: 'Non è sempre andata bene.',
     choices: [
-      { t: 'Mi hanno detto che è normale, che passa. Non mi ha aiutato molto.', s:{c:0,a:1,f:2}, thought: 'mi hanno detto che è normale. forse lo è. ma sentirlo non aiuta.' },
-      { t: 'Qualcuno mi ha ascoltato davvero. Non ha risolto niente, ma è servito.', s:{c:2,a:3,f:0}, thought: 'qualcuno ha ascoltato. non ha risolto. ma non ero sola.' },
+      { t: 'Mi hanno detto che è normale e che passa, ma non mi ha aiutato molto.', s:{c:0,a:1,f:2}, thought: 'mi hanno detto che è normale, forse lo è, ma sentirlo non aiuta.' },
+      { t: 'Qualcuno mi ha ascoltato davvero, non ha risolto niente ma è servito.', s:{c:2,a:3,f:0}, thought: 'qualcuno ha ascoltato, non ha risolto niente, ma non ero solo.' },
     ]
   },
   {
@@ -451,54 +461,46 @@ function getFinale(s) {
   if (pF > .45) return {
     t: 'Qualcuno che impara a muoversi',
     b: [
-      'Hai aspettato molto.',
-      'Hai evitato, rimandato,',
-      'trovato buone ragioni per stare fermo.',
-      'Non è una colpa.',
-      '',
-      '<strong>Ma adesso sai cosa succede quando non scegli.</strong>',
-      'È già qualcosa da cui ricominciare.',
+      'Hai aspettato molto, hai evitato e rimandato,',
+      'trovando buone ragioni per stare fermo,',
+      'e non è una colpa.',
+      '<strong>Ma adesso sai cosa succede quando non scegli,</strong>',
+      'ed è già qualcosa da cui ricominciare.',
     ]};
 
   if (pC > .42) return {
     t: 'Qualcuno che non aspetta di essere pronto',
     b: [
-      'Hai fatto, anche senza certezze.',
-      'Anche senza sapere dove portava.',
-      '',
-      '<strong>Non hai aspettato di avere tutte le risposte</strong>',
-      '<strong>per iniziare.</strong>',
-      'Questo conta.',
+      'Hai fatto anche senza certezze,',
+      'anche senza sapere dove portava,',
+      '<strong>senza aspettare di avere tutte le risposte</strong>',
+      '<strong>per iniziare,</strong> e questo conta.',
     ]};
 
   if (pA > .42) return {
     t: 'Qualcuno che sa abitare l\'incertezza',
     b: [
-      'Hai imparato a non fuggire dal non sapere.',
-      'A tenerlo, a conviverci.',
-      '',
-      '<strong>L\'incertezza non è un difetto:</strong>',
-      '<strong>è lo spazio in cui si decide</strong>',
+      'Hai imparato a non fuggire dal non sapere,',
+      'a tenerlo con te e a conviverci,',
+      '<strong>perché l\'incertezza non è un difetto</strong>',
+      '<strong>ma lo spazio in cui si decide</strong>',
       '<strong>chi si vuole diventare.</strong>',
     ]};
 
   if (pC > pA && pC > pF) return {
     t: 'Qualcuno in movimento, che ha ancora paura',
     b: [
-      'Non hai ancora le risposte.',
-      'Ma sei andato avanti lo stesso.',
-      '',
-      '<strong>Procedere senza certezze non è incoscienza.</strong>',
-      '<strong>È coraggio.</strong>',
+      'Non hai ancora le risposte,',
+      'ma sei andato avanti lo stesso,',
+      '<strong>e procedere senza certezze</strong>',
+      '<strong>non è incoscienza, è coraggio.</strong>',
     ]};
 
   if (pA > pC && pA > pF) return {
     t: 'Qualcuno che sa portare il peso della realtà',
     b: [
-      'Non fuggi da ciò che pesa.',
-      'Lo tieni con te.',
-      '',
-      '<strong>Stare con le cose difficili senza scappare</strong>',
+      'Non fuggi da ciò che pesa, lo tieni con te,',
+      '<strong>e stare con le cose difficili senza scappare</strong>',
       '<strong>è una forma di forza che non si vede,</strong>',
       '<strong>ma si sente.</strong>',
     ]};
@@ -507,93 +509,93 @@ function getFinale(s) {
     t: 'Qualcuno ancora nel mezzo',
     b: [
       'Sei ancora qui, nel buio,',
-      'senza una direzione precisa.',
-      '',
-      '<strong>Ma hai attraversato dodici momenti difficili.</strong>',
-      '<strong>E sei ancora in piedi.</strong>',
-      'Forse è abbastanza per adesso.',
+      'senza una direzione precisa,',
+      '<strong>ma hai attraversato dodici momenti difficili</strong>',
+      '<strong>e sei ancora in piedi,</strong>',
+      'e forse è abbastanza per adesso.',
     ]};
 }
 
-// 3 piante diverse per i 3 livelli
-const MAZES = [
-  // livello 0 — buio, freddo
-  [
-    [1,1,1,1,1,1,1,1,1,1,1,1,1],
-    [1,0,0,0,1,0,0,0,1,0,0,0,1],
-    [1,0,1,0,1,0,1,0,0,0,1,0,1],
-    [1,0,1,0,0,0,1,1,1,0,1,0,1],
-    [1,0,1,1,1,0,0,0,1,0,0,0,1],
-    [1,0,0,0,1,0,1,0,1,1,1,0,1],
-    [1,1,1,0,1,0,1,0,0,0,0,0,1],
-    [1,0,0,0,0,0,1,1,1,0,1,1,1],
-    [1,0,1,1,1,0,0,0,1,0,0,0,1],
-    [1,0,0,0,1,1,1,0,1,1,1,0,1],
-    [1,1,1,0,0,0,0,0,0,0,1,0,1],
-    [1,0,0,0,1,0,1,0,1,0,0,0,1],
-    [1,1,1,1,1,1,1,1,1,1,1,1,1],
-  ],
-  // livello 1 — più complesso
-  [
-    [1,1,1,1,1,1,1,1,1,1,1,1,1],
-    [1,0,0,0,0,0,1,0,0,0,0,0,1],
-    [1,0,1,1,1,0,1,0,1,1,1,0,1],
-    [1,0,1,0,0,0,0,0,0,0,1,0,1],
-    [1,0,1,0,1,1,1,1,1,0,1,0,1],
-    [1,0,0,0,1,0,0,0,1,0,0,0,1],
-    [1,1,1,0,1,0,1,0,1,0,1,1,1],
-    [1,0,0,0,0,0,1,0,0,0,0,0,1],
-    [1,0,1,1,1,1,1,1,1,1,1,0,1],
-    [1,0,0,0,0,0,0,0,0,0,1,0,1],
-    [1,1,1,0,1,1,1,0,1,0,1,0,1],
-    [1,0,0,0,1,0,0,0,1,0,0,0,1],
-    [1,1,1,1,1,1,1,1,1,1,1,1,1],
-  ],
-  // livello 2 — più buio, più difficile
-  [
-    [1,1,1,1,1,1,1,1,1,1,1,1,1],
-    [1,0,1,0,0,0,0,0,1,0,0,0,1],
-    [1,0,1,0,1,1,1,0,1,0,1,0,1],
-    [1,0,0,0,1,0,0,0,0,0,1,0,1],
-    [1,1,1,0,1,0,1,1,1,1,1,0,1],
-    [1,0,0,0,0,0,1,0,0,0,0,0,1],
-    [1,0,1,1,1,0,1,0,1,0,1,1,1],
-    [1,0,0,0,1,0,0,0,1,0,0,0,1],
-    [1,1,1,0,1,1,1,0,1,1,1,0,1],
-    [1,0,0,0,0,0,1,0,0,0,1,0,1],
-    [1,0,1,1,1,0,1,0,1,0,0,0,1],
-    [1,0,0,0,0,0,0,0,1,0,1,0,1],
-    [1,1,1,1,1,1,1,1,1,1,1,1,1],
-  ],
-];
-
-const ROWS = MAZES[0].length, COLS = MAZES[0][0].length;
+// I labirinti sono generati a ogni partita: cunicoli stretti, poche simmetrie.
+// Ogni piano è più grande e più intricato del precedente.
 const CELL = 4;
 const FLOOR_H = 3.6;
 const wallH = 3.2;
-const SLAB = FLOOR_H - wallH;   // spessore del solaio fra un piano e l'altro
-const EPS  = 0.05;              // scarto anti z-fighting fra pavimento e solaio
+const SLAB = FLOOR_H - wallH;
+const EPS  = 0.05;
 
-const START = { r:1, c:1 };
-const EXIT  = { r:11, c:11 };
+const FLOOR_SIZE  = [13, 17, 21];  // lato in celle, sempre dispari
+const FLOOR_LOOPS = [0.16, 0.09, 0.035]; // quanti vicoli ciechi vengono riaperti
+
+// scavo a backtracking: produce corridoi larghi una cella, tortuosi e irregolari
+function carveMaze(size, loopRate) {
+  const g = Array.from({ length: size }, () => Array(size).fill(1));
+  const stack = [[1, 1]];
+  g[1][1] = 0;
+
+  while (stack.length) {
+    const [r, c] = stack[stack.length - 1];
+    const dirs = [[-2,0],[2,0],[0,-2],[0,2]].sort(() => Math.random() - 0.5);
+    let carved = false;
+    for (const [dr, dc] of dirs) {
+      const nr = r + dr, nc = c + dc;
+      if (nr > 0 && nr < size - 1 && nc > 0 && nc < size - 1 && g[nr][nc] === 1) {
+        g[r + dr / 2][c + dc / 2] = 0;
+        g[nr][nc] = 0;
+        stack.push([nr, nc]);
+        carved = true;
+        break;
+      }
+    }
+    if (!carved) stack.pop();
+  }
+
+  // qualche muro in meno crea anelli: meno anelli = piano più difficile
+  for (let r = 2; r < size - 2; r++) {
+    for (let c = 2; c < size - 2; c++) {
+      if (g[r][c] === 1 && Math.random() < loopRate) {
+        const oriz = g[r][c-1] === 0 && g[r][c+1] === 0 && g[r-1][c] === 1 && g[r+1][c] === 1;
+        const vert = g[r-1][c] === 0 && g[r+1][c] === 0 && g[r][c-1] === 1 && g[r][c+1] === 1;
+        if (oriz || vert) g[r][c] = 0;
+      }
+    }
+  }
+  return g;
+}
+
+const MAZES = FLOOR_SIZE.map((n, i) => carveMaze(n, FLOOR_LOOPS[i]));
+
+const ROWS_OF = f => MAZES[f].length;
+const COLS_OF = f => MAZES[f][0].length;
+const MAXR = Math.max(...FLOOR_SIZE);
+const MAXC = MAXR;
+
+// tutti i piani condividono l'origine: la stessa cella cade nello stesso punto
+function cellToWorld(r, c, floor = 0) {
+  return {
+    x: (c - (MAXC - 1) / 2) * CELL,
+    y: floor * FLOOR_H,
+    z: (r - (MAXR - 1) / 2) * CELL
+  };
+}
+
+function cellAtWorld(x, z) {
+  return {
+    r: Math.floor(z / CELL + (MAXR - 1) / 2 + 0.5),
+    c: Math.floor(x / CELL + (MAXC - 1) / 2 + 0.5),
+  };
+}
+
+const START = { r: 1, c: 1 };
 
 function freeCellsForFloor(floor) {
   const cells = [];
-  for (let r = 1; r < ROWS-1; r++)
-    for (let c = 1; c < COLS-1; c++)
-      if (MAZES[floor][r][c] === 0 &&
-          !(r===START.r && c===START.c) &&
-          !(r===EXIT.r  && c===EXIT.c))
-        cells.push({r, c});
+  const n = ROWS_OF(floor);
+  for (let r = 1; r < n - 1; r++)
+    for (let c = 1; c < n - 1; c++)
+      if (MAZES[floor][r][c] === 0 && !(r === START.r && c === START.c))
+        cells.push({ r, c });
   return cells;
-}
-
-function cellToWorld(r, c, floor=0) {
-  return {
-    x: (c - (COLS-1)/2) * CELL,
-    y: floor * FLOOR_H,
-    z: (r - (ROWS-1)/2) * CELL
-  };
 }
 
 function cellDist(a, b) {
@@ -634,37 +636,61 @@ const WHISPER_CELLS = [
 ];
 
 // vani scala: una cella condivisa fra due piani, con accesso da sud e uscita a nord
-const STAIRWELLS = [
-  { cell: { r: 9, c: 3 },  lower: 0 },
-  { cell: { r: 3, c: 9 },  lower: 1 },
-];
+// una scala vuole un corridoio dritto davanti: cerchiamo tre celle libere in fila
+// che esistano e siano percorribili su entrambi i piani coinvolti
+function findStairCell(lower) {
+  const a = MAZES[lower], b = MAZES[lower + 1];
+  const n = Math.min(ROWS_OF(lower), ROWS_OF(lower + 1));
+  const cand = [];
+  for (let r = 3; r < n - 3; r++) {
+    for (let c = 2; c < n - 2; c++) {
+      const dritto = m => m[r-1][c] === 0 && m[r][c] === 0 && m[r+1][c] === 0 && m[r+2][c] === 0;
+      const laterali = m => m[r][c-1] === 1 && m[r][c+1] === 1;
+      if (dritto(a) && dritto(b) && laterali(a) &&
+          !(r === START.r && c === START.c)) {
+        cand.push({ r, c });
+      }
+    }
+  }
+  if (!cand.length) {
+    // ripiego: qualsiasi cella libera su entrambi i piani
+    for (let r = 3; r < n - 3; r++)
+      for (let c = 2; c < n - 2; c++)
+        if (a[r][c] === 0 && b[r][c] === 0) cand.push({ r, c });
+  }
+  return cand[Math.floor(Math.random() * cand.length)];
+}
 
-// il vano e i suoi due accessi devono essere percorribili su entrambi i piani
+const STAIRWELLS = [0, 1].map(lower => ({ cell: findStairCell(lower), lower }));
+
+// il vano e la sua rampa devono essere percorribili su entrambi i piani
 STAIRWELLS.forEach(sw => {
   const { r, c } = sw.cell;
   [sw.lower, sw.lower + 1].forEach(fl => {
-    MAZES[fl][r][c] = 0;
-    if (r + 1 < ROWS) MAZES[fl][r + 1][c] = 0;
-    if (r - 1 >= 0)   MAZES[fl][r - 1][c] = 0;
+    const n = ROWS_OF(fl);
+    for (let k = -1; k <= 3; k++) {
+      const rr = r + k;
+      if (rr > 0 && rr < n - 1) MAZES[fl][rr][c] = 0;
+    }
   });
 });
 
-// il pozzo passante riguarda solo la cella del vano
 function shaftAt(r, c) {
   return STAIRWELLS.find(sw => sw.cell.r === r && sw.cell.c === c) || null;
 }
 
 // la rampa invece copre due celle: ingresso a sud e vano vero e proprio
+const RAMP_CELLS = 3;   // lunghezza della rampa in celle
 function stairAt(r, c) {
   return STAIRWELLS.find(sw =>
-    sw.cell.c === c && (sw.cell.r === r || sw.cell.r + 1 === r)
+    sw.cell.c === c && r >= sw.cell.r && r < sw.cell.r + RAMP_CELLS
   ) || null;
 }
 
 function cellAtWorld(x, z) {
   return {
-    r: Math.floor(z / CELL + (ROWS - 1) / 2 + 0.5),
-    c: Math.floor(x / CELL + (COLS - 1) / 2 + 0.5),
+    r: Math.floor(z / CELL + (MAXR - 1) / 2 + 0.5),
+    c: Math.floor(x / CELL + (MAXC - 1) / 2 + 0.5),
   };
 }
 
@@ -673,8 +699,8 @@ function groundY(x, z, floorHint) {
   const { r, c } = cellAtWorld(x, z);
   const sw = stairAt(r, c);
   if (sw && stairOpen(sw)) {
-    const { z: baseZ } = cellToWorld(sw.cell.r + 1, sw.cell.c, 0);
-    const RUN = CELL * 2;
+    const { z: baseZ } = cellToWorld(sw.cell.r + RAMP_CELLS - 1, sw.cell.c, 0);
+    const RUN = CELL * RAMP_CELLS;
     const t = Math.max(0, Math.min(1, (baseZ + CELL / 2 - z) / RUN));
     return sw.lower * FLOOR_H + t * FLOOR_H;
   }
@@ -720,8 +746,9 @@ function buildFloor(floor) {
   const fMat  = new THREE.MeshStandardMaterial({ color: FLOOR_FLOOR[floor], roughness: 1 });
   const cMat  = new THREE.MeshStandardMaterial({ color: FLOOR_CEIL[floor],  roughness: 1 });
 
-  for (let r = 0; r < ROWS; r++) {
-    for (let c = 0; c < COLS; c++) {
+  const n = ROWS_OF(floor);
+  for (let r = 0; r < n; r++) {
+    for (let c = 0; c < n; c++) {
       const { x, z } = cellToWorld(r, c, 0);
 
       if (maze[r][c] === 1) {
@@ -757,12 +784,12 @@ function buildFloor(floor) {
 
 // gradini: esistono solo dopo che il piano e' stato completato
 const staircases = STAIRWELLS.map((sw, i) => {
-  const { x, z: baseZ } = cellToWorld(sw.cell.r + 1, sw.cell.c, 0);
+  const { x, z: baseZ } = cellToWorld(sw.cell.r + RAMP_CELLS - 1, sw.cell.c, 0);
   const yBase = sw.lower * FLOOR_H;
-  const RUN = CELL * 2;
+  const RUN = CELL * RAMP_CELLS;
   const g = new THREE.Group();
   const stepMat = new THREE.MeshStandardMaterial({ color: 0x3a3a3a, roughness: 0.9 });
-  const STEPS = 18;
+  const STEPS = 26;
   const run = RUN / STEPS;
   const rise = FLOOR_H / STEPS;
 
@@ -780,7 +807,7 @@ const staircases = STAIRWELLS.map((sw, i) => {
   g.visible = false;
   scene.add(g);
 
-  return { group: g, panels: shaftPanels[i], sw, used: false };
+  return { group: g, panels: shaftPanels[i], sw, used: false, climbing: false };
 });
 
 function floorComplete(floor) {
@@ -788,7 +815,16 @@ function floorComplete(floor) {
   return nodes.length > 0 && nodes.every(n => n.triggered);
 }
 
-// luce finale — sul livello 2, posizione EXIT
+// luce finale: sull'ultimo piano, nella cella libera piu' lontana dal punto d'ingresso
+const EXIT = (() => {
+  const pool = freeCellsForFloor(2);
+  let best = pool[0], bestD = -1;
+  pool.forEach(c => {
+    const d = Math.hypot(c.r - START.r, c.c - START.c);
+    if (d > bestD) { bestD = d; best = c; }
+  });
+  return best;
+})();
 const {x: ex, z: ez} = cellToWorld(EXIT.r, EXIT.c, 0);
 const EXIT_FINAL = new THREE.Vector3(ex, 2 * FLOOR_H + 1.65, ez);
 const EXIT_START = new THREE.Vector3(ex * 4.5, 2 * FLOOR_H + 1.65, ez * 4.5);
@@ -874,15 +910,21 @@ WHISPER_CELLS.forEach((cells, floor) => {
 });
 
 // particelle per piano
-const fc = freeCellsForFloor(0);
+// ogni piano ha la sua estensione: le celle vanno pescate da quel piano,
+// altrimenti i livelli piu' grandi restano scoperti ai bordi
+const FLOOR_CELLS = [0, 1, 2].map(freeCellsForFloor);
+
 function makeParticles(count, size, opacity, speed, yMin, yMax) {
   const pos = new Float32Array(count * 3);
   const vel = new Float32Array(count * 3);
   for(let i = 0; i < count; i++){
-    const cell = fc[Math.floor(Math.random() * fc.length)];
+    // piu' particelle dove il piano e' piu' esteso
+    const rr = Math.random();
+    const fl = rr < 0.22 ? 0 : rr < 0.58 ? 1 : 2;
+    const pool = FLOOR_CELLS[fl];
+    const cell = pool[Math.floor(Math.random() * pool.length)];
     const {x, z} = cellToWorld(cell.r, cell.c, 0);
-    // distribuite su tutti e 3 i piani
-    const floorOffset = Math.floor(Math.random() * 3) * FLOOR_H;
+    const floorOffset = fl * FLOOR_H;
     pos[i*3]   = x + (Math.random()-.5) * CELL * .85;
     pos[i*3+1] = floorOffset + yMin + Math.random() * (yMax - yMin);
     pos[i*3+2] = z + (Math.random()-.5) * CELL * .85;
@@ -899,9 +941,9 @@ function makeParticles(count, size, opacity, speed, yMin, yMax) {
 }
 
 const particleLayers = [
-  makeParticles(900, 0.022, 0.45, 0.8, 0.1, wallH * 0.95),
-  makeParticles(300, 0.045, 0.35, 1.2, 0.2, wallH * 0.8),
-  makeParticles(120, 0.09,  0.20, 0.5, 0.5, wallH * 0.7),
+  makeParticles(2200, 0.022, 0.45, 0.8, 0.1, wallH * 0.95),
+  makeParticles(700,  0.045, 0.35, 1.2, 0.2, wallH * 0.8),
+  makeParticles(280,  0.09,  0.20, 0.5, 0.5, wallH * 0.7),
 ];
 
 function animateParticles() {
@@ -914,9 +956,11 @@ function animateParticles() {
       pos[i*3]   += Math.sin(tick_t * 0.3 + i) * 0.0008;
       pos[i*3+2] += Math.cos(tick_t * 0.25 + i) * 0.0008;
       // rimetti in basso sul suo piano quando supera il soffitto
-      const floorOffset = Math.floor(pos[i*3+1] / FLOOR_H) * FLOOR_H;
+      const fl = Math.max(0, Math.min(2, Math.floor(pos[i*3+1] / FLOOR_H)));
+      const floorOffset = fl * FLOOR_H;
       if(pos[i*3+1] > floorOffset + layer.yMax) {
-        const cell = fc[Math.floor(Math.random() * fc.length)];
+        const pool = FLOOR_CELLS[fl];
+        const cell = pool[Math.floor(Math.random() * pool.length)];
         const {x, z} = cellToWorld(cell.r, cell.c, 0);
         pos[i*3]   = x + (Math.random()-.5) * CELL * .85;
         pos[i*3+1] = floorOffset + layer.yMin;
@@ -983,6 +1027,7 @@ let tick_t=0, lastBob=0, hudFading=false;
 const gameNavEl    = document.getElementById('game-nav');
 const commandsEl   = document.getElementById('commands-popup');
 const ctrEl    = document.getElementById('counter');
+const glareEl  = document.getElementById('glare');
 const proxEl   = document.getElementById('prox');
 const panelEl  = document.getElementById('panel');
 const finaleEl = document.getElementById('finale');
@@ -1072,11 +1117,12 @@ function goHome() {
 const PLAYER_RADIUS = 0.55; // raggio in unità world
 
 function isWall(wx, wz) {
-  const col = (wx / CELL) + (COLS-1)/2;
-  const row = (wz / CELL) + (ROWS-1)/2;
+  const col = (wx / CELL) + (MAXC-1)/2;
+  const row = (wz / CELL) + (MAXR-1)/2;
   const c = Math.floor(col + 0.5);
   const r = Math.floor(row + 0.5);
-  if (r < 0 || r >= ROWS || c < 0 || c >= COLS) return true;
+  const n = ROWS_OF(currentFloor);
+  if (r < 0 || r >= n || c < 0 || c >= n) return true;
   return MAZES[currentFloor][r][c] === 1;
 }
 
@@ -1148,7 +1194,7 @@ function startYaw(floor) {
   ];
   for (const d of dirs) {
     const nr = r + d.dr, nc = c + d.dc;
-    if (nr>=0 && nr<ROWS && nc>=0 && nc<COLS && maze[nr][nc] === 0) return d.yaw;
+    if (nr>=0 && nr<maze.length && nc>=0 && nc<maze.length && maze[nr][nc] === 0) return d.yaw;
   }
   return 0;
 }
@@ -1172,10 +1218,11 @@ function drawMinimap() {
   mmCtx.fillStyle='rgba(6,6,10,0.8)';
   mmCtx.fillRect(0,0,W,H);
 
-  const cellW = W/COLS, cellH = H/ROWS;
+  const n = ROWS_OF(currentFloor);
+  const cellW = W/n, cellH = H/n;
 
-  for(let r=0;r<ROWS;r++){
-    for(let c=0;c<COLS;c++){
+  for(let r=0;r<n;r++){
+    for(let c=0;c<n;c++){
       if(MAZES[currentFloor][r][c]===1){
         mmCtx.fillStyle='rgba(255,255,255,0.13)';
         mmCtx.fillRect(c*cellW, r*cellH, cellW, cellH);
@@ -1183,8 +1230,8 @@ function drawMinimap() {
     }
   }
 
-  const pc = player.x/CELL + (COLS-1)/2;
-  const pr = player.z/CELL + (ROWS-1)/2;
+  const pc = player.x/CELL + (MAXC-1)/2;
+  const pr = player.z/CELL + (MAXR-1)/2;
   mmCtx.save();
   mmCtx.translate(pc*cellW+cellW/2, pr*cellH+cellH/2);
   mmCtx.rotate(-player.yaw);
@@ -1355,11 +1402,15 @@ function stairOpen(sw) {
 // dentro la rampa? serve per capire quando il giocatore ne è uscito
 function onRamp(st) {
   const { r, c } = cellAtWorld(player.x, player.z);
-  return c === st.sw.cell.c && (r === st.sw.cell.r || r === st.sw.cell.r + 1);
+  return c === st.sw.cell.c && r >= st.sw.cell.r && r < st.sw.cell.r + RAMP_CELLS;
 }
 
 function updateStaircases() {
-  staircases.forEach(st => {
+  staircases.forEach((st, i) => {
+    const su = onRamp(st) && stairOpen(st.sw);
+    if (su && !st.climbing) { st.climbing = true; showClimbLine(i); }
+    if (!su) st.climbing = false;
+
     // salito al piano sopra e sceso dai gradini: la scala si richiude alle spalle
     if (!st.used && floorComplete(st.sw.lower)
         && currentFloor === st.sw.lower + 1 && !onRamp(st)) {
@@ -1390,6 +1441,21 @@ function updateFloorFromHeight() {
     updateCounter();
     restartMelody();
   }
+}
+
+
+// una frase affiora mentre si sale: la prima risposta che ci si sta dando
+const CLIMB_LINES = [
+  'qualcosa comincia a schiarirsi',
+  'non era il futuro a mancarmi, era il coraggio di guardare indietro',
+];
+
+function showClimbLine(i) {
+  const t = CLIMB_LINES[i] || CLIMB_LINES[0];
+  clearTimeout(thoughtTimer);
+  thoughtEl.textContent = t;
+  thoughtEl.style.opacity = '1';
+  thoughtTimer = setTimeout(() => { thoughtEl.style.opacity = '0'; }, 5200);
 }
 
 function updateThought() {}
@@ -1428,6 +1494,10 @@ function loop(){
     const target = groundY(player.x, player.z, currentFloor);
     player.y += (target - player.y) * 0.25;
     updateFloorFromHeight();
+    // HUD attenuato mentre si cammina, cosi' non disturba la vista
+    gameNavEl.classList.toggle('walking', moving);
+    ctrEl.classList.toggle('walking', moving);
+
     const bobFreq = running ? 14 : 9;
     const bob = moving ? Math.sin(tick_t*bobFreq)*.042 : 0;
     if(moving){ const bv=Math.sin(tick_t*bobFreq); if(lastStepBob<0&&bv>=0) playStep(); lastStepBob=bv; } else lastStepBob=0;
@@ -1518,17 +1588,24 @@ function openMemory(idx){
       n.ptl.intensity=0;
       n.group.visible=false;
       setFloorVisibility();
+      // la scheda esce, poi la luce si ritira lentamente
       panelEl.classList.remove('open');
+      setTimeout(() => glareEl.classList.remove('on'), 500);
       document.getElementById('c').classList.remove('blurred');
       setTimeout(()=>{
+        gameNavEl.classList.remove('hidden');
+        ctrEl.classList.remove('hidden');
         panelOpen=false; gameActive=true; updateCounter();
         if(melGain && musicEnabled) melGain.gain.setTargetAtTime(0.25, getAC().currentTime, 0.6);
         acquireLock();
-      }, 900);
+      }, 1700);
     });
     ch.appendChild(b);
   });
+  gameNavEl.classList.add('hidden');
+  ctrEl.classList.add('hidden');
   requestAnimationFrame(() => {
+    glareEl.classList.add('on');
     panelEl.classList.add('open');
     document.getElementById('c').classList.add('blurred');
     if(melGain && musicEnabled) melGain.gain.setTargetAtTime(0.05, getAC().currentTime, 0.5);
@@ -1539,7 +1616,12 @@ function openExit(){
   if(!gameActive) return;
   gameActive=false;
   releaseLock();
-  doFade(()=>showFinale());
+  // ci si avvicina alla luce: lo schermo si accende, poi appare il ritratto
+  glareEl.classList.add('on');
+  setTimeout(() => {
+    showFinale();
+    setTimeout(() => glareEl.classList.remove('on'), 900);
+  }, 1300);
 }
 
 function showFinale(){
@@ -1552,8 +1634,7 @@ function showFinale(){
   proxEl.style.opacity = '0';
   const f=getFinale(scores);
   document.getElementById('ftitle').innerHTML=f.t;
-  document.getElementById('fbody').innerHTML =
-    f.b.map(l => l === '' ? '<span class="fgap"></span>' : `<span class="fline">${l}</span>`).join('');
+  document.getElementById('fbody').innerHTML = f.b.filter(l => l !== '').join(' ');
   const tot=scores.c+scores.a+scores.f||1;
   const barsEl=document.getElementById('bars'); barsEl.innerHTML='';
   [['c','coraggio'],['a','accettazione'],['f','fuga']].forEach(([k,l])=>{
@@ -1625,7 +1706,7 @@ function showIntro(){
   document.getElementById('intro-guide').classList.remove('show');
   introCtaEl.classList.remove('show');
   const skipHint = document.getElementById('skip-hint');
-  if(skipHint) { skipHint.style.opacity = '1'; }
+  if(skipHint) { skipHint.style.display = 'inline-block'; skipHint.style.opacity = '1'; }
 
   let skipped = false;
 
@@ -1640,7 +1721,7 @@ function showIntro(){
       l.innerHTML = html;
     });
     document.getElementById('intro-guide').classList.add('show');
-    if(skipHint) skipHint.style.opacity = '0';
+    if(skipHint) { skipHint.style.opacity = '0'; skipHint.style.display = 'none'; }
     setTimeout(() => introCtaEl.classList.add('show'), 200);
   }
   function onSkip(e) {
@@ -1698,7 +1779,7 @@ function showIntro(){
     if(skipped) return;
     if(idx === firstGuideIdx) guideEl.classList.add('show');
     if(idx >= lines.length) {
-      if(skipHint) skipHint.style.opacity = '0';
+      if(skipHint) { skipHint.style.opacity = '0'; skipHint.style.display = 'none'; }
       window.removeEventListener('keydown', onSkip);
       setTimeout(() => introCtaEl.classList.add('show'), 400);
       return;
